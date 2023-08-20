@@ -2,16 +2,17 @@
 
 {% block body %}
     <!-- create form with text field and submit button within a box -->
-    <div style="padding: 20px;">
+    <form action="{% url 'post' %}" method="post" style="padding: 20px;">
+        {% csrf_token %}
         <div class="card border">
             <div class="card-body">
                 <div class="form-group">
                     <label for="exampleFormControlTextarea1" class="font-weight-bold">New Post</label>
-                    <textarea class="form-control" id="exampleFormControlTextarea1" rows="2"></textarea>
+                    <textarea class="form-control" id="exampleFormControlTextarea1" rows="2" name="content" required></textarea>
+                    <input class="btn btn-primary" type="submit" value="Post" style="margin-top: 10px;">
                 </div>
-            <a href="#" class="btn btn-primary">Post</a>
             </div>
         </div>
-    </div>
+    </form>
 
 {% endblock %}
