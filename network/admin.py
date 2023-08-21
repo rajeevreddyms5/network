@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import User, Posts
+from .models import User, Posts, UserProfile
 
 class PostsAdmin(admin.ModelAdmin):
     postdisplay = ("content", "created_at", "liked", "author")
@@ -8,3 +8,4 @@ class PostsAdmin(admin.ModelAdmin):
 # Register your models here.
 admin.site.register(User)
 admin.site.register(Posts, PostsAdmin)
+admin.site.register(UserProfile)

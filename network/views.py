@@ -4,7 +4,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
-from .models import User, Posts
+from .models import User, Posts, UserProfile
 
 
 def index(request):
@@ -82,4 +82,27 @@ def post(request):
         
     # redirect to index
     return HttpResponseRedirect(reverse(index))
+
+
+# create profile view function that renders the profile page
+def profile(request):
+    # get current user id
+    current_user = request.user.id
+    user = User.objects.get(id=current_user)
+    print(user, current_user)
+
+    # get all followers to the current user
+    followed_by = user.following.all()
+    print(followed_by)
+
+    if followed_by is not None:
+        return render(request, "network/profile.html", {
+            # filter posts by created_at date
+            "followed_by": followed_by,
+        })
+    else:
+        return render(request, "network/profile.html", {
+            # filter posts by created_at date
+            "followed_by": "0",
+        })
         
