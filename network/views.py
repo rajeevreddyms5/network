@@ -94,13 +94,34 @@ def profile(request):
     
     # get current user
     user = User.objects.get(id=user_id)
-    print(user_id, user)
 
     # get all followers to the current user
-    followed_by = list(user.following.all())
-    #print(followed_by)
+    followed_by = list(user.followed_by.all())
+    
+    # get all users current user is following
+    following = list(user.following.all())
+    
+    # get posts of the current user
+    posts = list(user.authored_posts.order_by("-created_at").all())
+    
+    # get all users except current user
+    users = User.objects.exclude(id=user_id)
+    
+    # for each user in users check whether they are followed by the current user
+    userList = []
+    for u in users:
+        if u in following:
+            userList.append([u.username, True])
+        else:
+            userList.append([u.username, False])
+            
+    print(userList)
+    
     return render(request, "network/profile.html", {
-        # filter posts by created_at date
         "followed_by": len(followed_by),
+        "following": len(following),
+        "no_posts": len(posts),
+        "posts": user.authored_posts.order_by("-created_at").all(),
+        "users": userList
     })
         

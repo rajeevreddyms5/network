@@ -12,5 +12,5 @@ urlpatterns = [
     path("profile", views.profile, name="profile"),
     
     # API Routes
-    path("/<int:email_id>", views.index, name="index"),
+    path("<int:email_id>", views.index, name="index"),
 ]

@@ -29,8 +29,8 @@ class Posts(models.Model):
 
 # create model for following users
 class UserProfile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    followers = models.ManyToManyField(User, related_name='following', blank=True)
+    user_name = models.ForeignKey(User, related_name='following', on_delete=models.CASCADE)
+    followers = models.ForeignKey(User, related_name='followed_by', on_delete=models.CASCADE, blank=True, null=True)
 
     def __str__(self):
-        return f"{self.user}"
+        return f"{self.followers}"
