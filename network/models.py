@@ -30,31 +30,7 @@ class Posts(models.Model):
 # create model for following users
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    followers = models.ManyToManyField(User, related_name='following')
+    followers = models.ManyToManyField(User, related_name='following', blank=True)
 
-    def follow(self, user):
-        """
-        Adds a user to the set of followers.
-
-        Parameters:
-            user (User): The user to be added as a follower.
-
-        Returns:
-            None
-        """
-        self.followers.add(user)
-
-    def unfollow(self, user):
-        """
-        Removes a user from the list of followers.
-
-        Parameters:
-            user (str): The username of the user to be unfollowed.
-
-        Returns:
-            None
-        """
-        self.followers.remove(user)
-    
     def __str__(self):
-        return f"{self.user} : {self.followers}"
+        return f"{self.user}"

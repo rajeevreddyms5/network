@@ -87,22 +87,20 @@ def post(request):
 # create profile view function that renders the profile page
 def profile(request):
     # get current user id
-    current_user = request.user.id
-    user = User.objects.get(id=current_user)
-    print(user, current_user)
+    if request.user.is_authenticated:
+        user_id = request.user.id
+    else:
+        return HttpResponseRedirect(reverse("index"))
+    
+    # get current user
+    user = User.objects.get(id=user_id)
+    print(user_id, user)
 
     # get all followers to the current user
-    followed_by = user.following.all()
-    print(followed_by)
-
-    if followed_by is not None:
-        return render(request, "network/profile.html", {
-            # filter posts by created_at date
-            "followed_by": followed_by,
-        })
-    else:
-        return render(request, "network/profile.html", {
-            # filter posts by created_at date
-            "followed_by": "0",
-        })
+    followed_by = list(user.following.all())
+    #print(followed_by)
+    return render(request, "network/profile.html", {
+        # filter posts by created_at date
+        "followed_by": len(followed_by),
+    })
         
