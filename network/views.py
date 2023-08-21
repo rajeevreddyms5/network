@@ -9,7 +9,8 @@ from .models import User, Posts
 
 def index(request):
     return render(request, "network/index.html", {
-        "posts": Posts.objects.all()
+        # filter posts by created_at date
+        "posts": Posts.objects.order_by("-created_at").all()
     })
 
 

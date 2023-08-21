@@ -19,16 +19,15 @@
 
     <!-- show all posts -->
     {% for post in posts %}
-        <div class="card">
-                <div class="card border">
-                    <div class="card-body">
-                        <h5 class="card-title text-capitalize">{{ post.author }}</h5>
-                        <a href="#" class="card-link">Edit</a>
-                        <div class="card-text">{{ post.content }}</div>
-                        <div class="text-muted">{{ post.created_at }}</div>
-                    </div>
-                </div>
-            </div>
+    <div style="padding-left: 20px; padding-right: 20px; padding-bottom: 10px;">
+        <div class="card border" style="padding: 10px;">
+            <h5 class="card-title text-capitalize">{{ post.author }}</h5>
+            <a href="#" class="card-link">Edit</a>
+            <div class="card-text">{{ post.content }}</div>
+            <div class="text-muted">{{ post.created_at }}</div>
+            <div class="card-text">❤️{{ post.liked.count }}</div>
+        </div>
+    </div>
         {% endfor %}
 
 {% endblock %}
