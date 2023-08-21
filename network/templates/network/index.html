@@ -15,4 +15,15 @@
         </div>
     </form>
 
+    <!-- show all posts -->
+    {% for post in posts %}
+        <div class="card-body">
+                <div class="card border">
+                    <div class="card-body">
+                        <p class="card-text">{{ post.author }} : {{ post.content }}</p>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+
 {% endblock %}

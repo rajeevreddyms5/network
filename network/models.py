@@ -15,6 +15,16 @@ class Posts(models.Model):
     
     def __str__(self):
         return f"{self.author} : {self.content}"
+    
+    # serialze for api
+    def serialize(self):
+        return {
+            "id": self.id,
+            "content": self.content,
+            "author": self.author,
+            "created_at": self.created_at.strftime("%b %d %Y, %I:%M %p"),
+            "liked": [user.username for user in self.liked.all()]
+        }
 
 
 

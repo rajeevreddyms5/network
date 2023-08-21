@@ -9,4 +9,7 @@ urlpatterns = [
     path("logout", views.logout_view, name="logout"),
     path("register", views.register, name="register"),
     path("post", views.post, name="post"),
+    
+    # API Routes
+    path("/<int:email_id>", views.index, name="index"),
 ]
