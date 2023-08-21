@@ -2,25 +2,30 @@
 
 {% block body %}
     <!-- create form with text field and submit button within a box -->
-    <form action="{% url 'post' %}" method="post" style="padding: 20px;">
-        {% csrf_token %}
-        <div class="card border">
-            <div class="card-body">
-                <div class="form-group">
-                    <label for="exampleFormControlTextarea1" class="font-weight-bold">New Post</label>
-                    <textarea class="form-control" id="exampleFormControlTextarea1" rows="2" name="content" required></textarea>
-                    <input class="btn btn-primary" type="submit" value="Post" style="margin-top: 10px;">
+    {% if user.is_authenticated %}
+        <form action="{% url 'post' %}" method="post" style="padding: 20px;">
+            {% csrf_token %}
+            <div class="card border">
+                <div class="card-body">
+                    <div class="form-group">
+                        <label for="exampleFormControlTextarea1" class="font-weight-bold">New Post</label>
+                        <textarea class="form-control" id="exampleFormControlTextarea1" rows="2" name="content" required></textarea>
+                        <input class="btn btn-primary" type="submit" value="Post" style="margin-top: 10px;">
+                    </div>
                 </div>
             </div>
-        </div>
-    </form>
+        </form>
+    {% endif %}
 
     <!-- show all posts -->
     {% for post in posts %}
-        <div class="card-body">
+        <div class="card">
                 <div class="card border">
                     <div class="card-body">
-                        <p class="card-text">{{ post.author }} : {{ post.content }}</p>
+                        <h5 class="card-title text-capitalize">{{ post.author }}</h5>
+                        <a href="#" class="card-link">Edit</a>
+                        <div class="card-text">{{ post.content }}</div>
+                        <div class="text-muted">{{ post.created_at }}</div>
                     </div>
                 </div>
             </div>
