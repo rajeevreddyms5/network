@@ -105,16 +105,21 @@ def profile(request):
     posts = list(user.authored_posts.order_by("-created_at").all())
     
     # get all users except current user
-    users = User.objects.exclude(id=user_id)
+    users = User.objects.exclude(id=user_id).exclude(username="rajeev")
     
     # for each user in users check whether they are followed by the current user
     userList = []
     for name in users:
-        for a in following:
-            if str(name) == str(a):
-                userList.append([name, True])
-            else:
-                userList.append([name, False])
+        print(name)
+        if len(following) != 0:
+            for a in following:
+                print(a)
+                if str(name) == str(a):
+                    userList.append([name, True])
+                else:
+                    userList.append([name, False])
+        else:
+            userList.append([name, False])
             
     print(userList)
     
