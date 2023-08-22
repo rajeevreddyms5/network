@@ -109,11 +109,12 @@ def profile(request):
     
     # for each user in users check whether they are followed by the current user
     userList = []
-    for u in users:
-        if u in following:
-            userList.append([u.username, True])
-        else:
-            userList.append([u.username, False])
+    for name in users:
+        for a in following:
+            if str(name) == str(a):
+                userList.append([name, True])
+            else:
+                userList.append([name, False])
             
     print(userList)
     
