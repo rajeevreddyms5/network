@@ -110,19 +110,17 @@ def profile(request):
     # for each user in users check whether they are followed by the current user
     userList = []
     for name in users:
-        print(name)
         if len(following) != 0:
             for a in following:
-                print(a)
+                print(name, a)
                 if str(name) == str(a):
                     userList.append([name, True])
                 else:
                     userList.append([name, False])
         else:
             userList.append([name, False])
-            
-    print(userList)
     
+    # render httpresponse with context
     return render(request, "network/profile.html", {
         "followed_by": len(followed_by),
         "following": len(following),
@@ -130,4 +128,30 @@ def profile(request):
         "posts": user.authored_posts.order_by("-created_at").all(),
         "users": userList
     })
+
+
+# following view that renders following page with context of users following by the current user
+def following(request):
+    # get current user id
+    if request.user.is_authenticated:
+        user_id = request.user.id
+    else:
+        return HttpResponseRedirect(reverse("index"))
+    
+    # get current user
+    user = User.objects.get(id=user_id)
+    
+    # get all the users that the current user is following
+    following = list(user.following.all())
+    print(f"id = {following}")
+     
+    # get all the posts by the following users
+    posts = list(Posts.objects.filter(author=2).order_by("-created_at").all())
+    print(len(posts))
+    
+    return render(request, "network/following.html", {
+        "posts": posts,
+        "no_posts": len(posts),
+    })
+    
         
