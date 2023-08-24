@@ -1,4 +1,4 @@
-from django.test import TestCase
+from django.test import TestCase, Client
 from .models import UserProfile, User, Posts
 
 # Create your tests here.
@@ -51,6 +51,22 @@ class PostsModelTestCase(TestCase):
         self.assertQuerysetEqual(post0.liked.all(), [user0])
         self.assertQuerysetEqual(post1.liked.all(), [user1])
         self.assertQuerysetEqual(post2.liked.all(), [])
+        
+    
+    # test index view page response
+    def test_index(self):
+        
+            # setup client to make requests
+            c = Client()
+        
+            # send get request to index page and store response
+            response = c.get("")
+        
+            # make sure the status code is 200
+            self.assertEqual(response.status_code, 200)
+            
+            # make sure three posts are returned in the context
+            self.assertEqual(response.context['posts'].count(), 3)
     
 
 # create UserProfile Model Test Case
@@ -67,7 +83,6 @@ class UserProfileModelTestCase(TestCase):
         UserProfile.objects.create(user_name=user0, follows=user1)
         UserProfile.objects.create(user_name=user1, follows=user0)
         UserProfile.objects.create(user_name=user1, follows=user2)
-        UserProfile.objects.create(user_name=user2)
 
     # test user is followed by
     def test_followed_by(self):
@@ -76,14 +91,13 @@ class UserProfileModelTestCase(TestCase):
         user1  = User.objects.get(username="user1")
         user2  = User.objects.get(username="user2")
 
-        # get UserProfile objects
-        userprofile0 = UserProfile.objects.get(user_name=user0)
-        userprofile1 = UserProfile.objects.get(user_name=user1)
-        userprofile2 = UserProfile.objects.get(user_name=user2)
-
-        # test
-        self.assertQuerysetEqual(user0.followed_by.all(), [user1])
-        self.assertQuerysetEqual(user1.followed_by.all(), [user0, user2])
-        self.assertQuerysetEqual(user2.followed_by.all(), [])
-
-
+        # test number of users the user is following
+        self.assertEqual(user0.following.all().count(), 1)
+        self.assertEqual(user1.following.all().count(), 2)
+        self.assertEqual(user2.following.all().count(), 0)
+        
+        # test number of users the user is followed by
+        self.assertEqual(user0.followed_by.all().count(), 1)
+        self.assertEqual(user1.followed_by.all().count(), 1)
+        self.assertEqual(user2.followed_by.all().count(), 1)
+            

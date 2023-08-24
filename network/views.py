@@ -66,7 +66,7 @@ def register(request):
         return render(request, "network/register.html")
 
 
-# create view function for post
+# create view function for post (just like a button function)
 def post(request):
     
     # get post data
