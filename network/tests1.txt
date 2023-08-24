@@ -1,0 +1,64 @@
+from django.test import TestCase
+from .models import UserProfile, User, Posts
+
+# Create your tests here.
+
+# create test case for Posts model
+class ModelTestCase(TestCase):
+        
+    def setUp(self):
+        # create test user and user1
+        self.user0 = User.objects.create_user(username="user0", email="user0@email", password="password0")
+        self.user1 = User.objects.create_user(username="user1", email="user1@email", password="password1")
+        self.user2 = User.objects.create_user(username="user2", email="user2@email", password="password2")
+
+        # test posts made by user
+        post0 = Posts.objects.create(content="test content by user 1", author = self.user0)
+        post1 = Posts.objects.create(content="text content by user 2", author = self.user1)
+        post2 = Posts.objects.create(content="test content by user 3", author = self.user2)
+
+def test_posts(self):
+    # tests
+    self.assertEqual(post0.author, "user0")
+    self.assertEqual(post1.author, "user1")
+    self.assertEqual(post2.author, "user2")
+
+# test liked field in post model
+        def test_liked(self):
+            self.assertEqual(post0.liked.all(), [])
+            self.assertEqual(post1.liked.all(), [])
+            self.assertEqual(post2.liked.all(), [])
+
+
+        # test liked field in post model after likes by the users
+        def test_liked_after(self):
+            # add like to post
+            post0.liked.add(user1)
+            post1.liked.add(user0, user2)
+
+            # test
+            self.assertEqual(post0.liked.all(), [user1])
+            self.assertEqual(post1.liked.all(), [user0, user2])
+        
+
+        # test followed field in user model
+        def test_following(self):
+            self.assertEqual(user0.following.all(), [])
+            self.assertEqual(user1.following.all(), [])
+            self.assertEqual(user2.following.all(), [])
+
+
+        # test followed field in user model after addition
+        def test_following_after(self):
+            # add followedby the users
+            user1.following.add(user0, user2)
+
+            # add followed_by the users
+            user0.followed_by.add(user1, user2)
+
+            # tests
+            self.assertEqual(user0.following.all(), [user1])
+            self.assertEqual(user1.following.all(), [user0, user2])
+
+
+
