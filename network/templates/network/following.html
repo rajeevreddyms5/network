@@ -1,6 +1,10 @@
 {% extends "network/layout.html" %}
 
 {% block body %}
+    {% if no_posts > 0 %}
+    <h2 style="margin-left: 20px; margin-top: 20px;">Posts made by users that you follow</h2>
+    {% endif %}
+
     <!-- show all posts -->
     {% if no_posts > 0 %}
         {% for post in posts %}
@@ -15,6 +19,6 @@
         </div>
         {% endfor %}
     {% else %}
-        <h3 style="padding-left: 20px; padding-right: 20px; padding-bottom: 10px;">No posts</h3>
+        <h3 style="padding-left: 20px; padding-right: 20px; padding-bottom: 10px;">No Posts made by users that you follow</h3>
     {% endif %}
 {% endblock %}

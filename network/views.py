@@ -143,15 +143,20 @@ def following(request):
     
     # get all the users that the current user is following
     following = list(user.following.all())
-    print(f"id = {following}")
-     
-    # get all the posts by the following users
-    posts = list(Posts.objects.filter(author=2).order_by("-created_at").all())
-    print(len(posts))
+
+    # create empty list
+    following_post_list = []
+
+    # loop through each user in following and append all the posts to the following_post_list
+    for name in following:
+        temp_user = User.objects.get(username=name)
+        for post in temp_user.authored_posts.order_by("-created_at").all():
+            following_post_list.append(post)
+
     
     return render(request, "network/following.html", {
-        "posts": posts,
-        "no_posts": len(posts),
+        "posts": following_post_list,
+        "no_posts": len(following_post_list),
     })
     
         

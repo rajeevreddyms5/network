@@ -107,7 +107,7 @@ class UserProfileModelTestCase(TestCase):
          self.assertEqual(response.status_code, 404)
     
 
-   # test profile page if the user is loggin in
+   # test profile page if the user is loggedin
     def test_profile_view_loggedin(self):
 
         # get user objects
@@ -116,11 +116,14 @@ class UserProfileModelTestCase(TestCase):
         user2  = User.objects.get(username="user2")
         
         # test posts made by user
-        post0 = Posts.objects.create(content="test content by user 1", author = user0)
-        post1 = Posts.objects.create(content="text content by user 2", author = user1)
-        post2 = Posts.objects.create(content="test content by user 3", author = user2)
+        Posts.objects.create(content="test content by user 1", author = user0)
+        Posts.objects.create(content="text content by user 2", author = user1)
+        Posts.objects.create(content="test content by user 3", author = user2)
 
+        # setup client
         c = Client()
+
+        # login the user0
         response = c.post("/login", {
             "username": "user0",
             "password": "password0"
@@ -137,3 +140,42 @@ class UserProfileModelTestCase(TestCase):
         self.assertEqual(response.context['posts'].count(), 1)
         self.assertEqual(response.context['no_posts'], 1)
         self.assertEqual(len(response.context['users']), 2)
+    
+
+    # test following page if the user is not logged in
+    def test_following_view_not_loggedin(self):
+         response = self.client.get("/profile/")
+         self.assertEqual(response.status_code, 404)
+        
+    
+    # test following page if the user is loggedin
+    def test_profile_view_loggedin(self):
+
+        # get user objects
+        user0  = User.objects.get(username="user0")
+        user1  = User.objects.get(username="user1")
+        user2  = User.objects.get(username="user2")
+        
+        # test posts made by user
+        Posts.objects.create(content="test content by user 1", author = user0)
+        Posts.objects.create(content="text content a by user 2", author = user1)
+        Posts.objects.create(content="text content b by user 2", author = user1)
+        Posts.objects.create(content="test content by user 3", author = user2)
+
+        # setup client
+        c = Client()
+
+        # login the user0
+        response = c.post("/login", {
+            "username": "user0",
+            "password": "password0"
+        })
+        self.assertEqual(response.status_code, 302)
+
+        # get profile page
+        response = c.get("/following")
+        self.assertEqual(response.status_code, 200)
+
+        # test profile page content
+        self.assertEqual(len(response.context['posts']), 2)
+        self.assertEqual(response.context['no_posts'], 2)
