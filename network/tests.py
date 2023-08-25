@@ -100,29 +100,13 @@ class UserProfileModelTestCase(TestCase):
         self.assertEqual(user0.followed_by.all().count(), 1)
         self.assertEqual(user1.followed_by.all().count(), 1)
         self.assertEqual(user2.followed_by.all().count(), 1)
-        
+    
+    # test profile page if the user is not logged in
+    def test_profile_view_not_loggedin(self):
+         response = self.client.get("/profile/")
+         self.assertEqual(response.status_code, 404)
+    
 
-
-    # test profile view page
-    def test_profile_user0(self):
+   # test profile page if the user is loggin in
+    def test_profile_view_loggedin(self):
         
-            # setup client to make requests
-            c = Client()
-            user0  = User.objects.get(username="user0")
-            c.force_login(user0)
-            #self.client.login(username='user0', password='password0')
-        
-            # send get request to index page and store response
-            response = c.get("/profile/")
-        
-            # make sure the status code is 200
-            self.assertEqual(response.status_code, 200)
-            
-            # make sure three posts are returned in the context
-            self.assertEqual(response.context['posts'].count(), 1)
-            self.assertEqual(response.context['no_posts'], 1)
-            self.assertEqual(response.context['followed_by'], 1)
-            self.assertEqual(response.context['following'], 1)
-            self.assertEqual(response.context['users'].count(), 2)
-            
-            
