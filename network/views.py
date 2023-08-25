@@ -1,4 +1,5 @@
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
@@ -67,6 +68,7 @@ def register(request):
 
 
 # create view function for post (just like a button function)
+@login_required
 def post(request):
     
     # get post data
@@ -85,6 +87,7 @@ def post(request):
 
 
 # create profile view function that renders the profile page
+@login_required
 def profile(request):
     # get current user id
     if request.user.is_authenticated:
@@ -112,7 +115,6 @@ def profile(request):
     for name in users:
         if len(following) != 0:
             for a in following:
-                print(name, a)
                 if str(name) == str(a):
                     userList.append([name, True])
                 else:
@@ -131,6 +133,7 @@ def profile(request):
 
 
 # following view that renders following page with context of users following by the current user
+@login_required
 def following(request):
     # get current user id
     if request.user.is_authenticated:
@@ -159,4 +162,19 @@ def following(request):
         "no_posts": len(following_post_list),
     })
     
-        
+
+# create follow or unfollow button function
+@login_required
+def followUnfollow(request, username):
+    # get current user
+    current_user = User.objects.get(id=request.user.id)
+
+    # create put request
+    if request.method == "PUT":
+        user = User.objects.get(username=username)
+        if user in request.current_user.following.all():
+            request.current_user.following.remove(user)
+            return HttpResponse(status=204)
+        else:
+            request.current_user.following.add(user)
+            return HttpResponse(status=204)

@@ -13,5 +13,5 @@ urlpatterns = [
     path("following", views.following, name="following"),
     
     # API Routes
-    path("<int:email_id>", views.index, name="index"),
+    path("followUnfollow/<str:email_user>", views.followUnfollow, name="followUnfollow"),
 ]
