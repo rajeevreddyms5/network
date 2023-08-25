@@ -1,5 +1,4 @@
 {% extends "network/layout.html" %}
-{% load static %}
 
 {% block body %}
     <h2 style="margin-left: 20px; margin-top: 20px;">Profile</h2>
@@ -41,7 +40,7 @@
             {% for user in users %}
                 <div class="card" style="width: 20rem;">
                     <div class="card-body">
-                    <h5 class="card-title" style="display: inline-block;">{{ user.0 }}</h5><a href="#" class="btn btn-primary" id="followButton" style="display: inline-block; float: right;">
+                    <h5 class="card-title" style="display: inline-block;">{{ user.0 }}</h5><a href={% url 'followUnfollow' user.0 user.1 user.0.id%} class="btn btn-primary" id="followButton" style="display: inline-block; float: right;">
                         {% if user.1 %}Unfollow{% else %}Follow{% endif %}</a>
                     </div>
                 </div>

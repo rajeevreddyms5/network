@@ -29,7 +29,7 @@ class Posts(models.Model):
 
 # create model for following users
 class UserProfile(models.Model):
-    user_name = models.ForeignKey(User, related_name='following', on_delete=models.CASCADE)
+    user_name = models.ForeignKey(User, related_name='following', on_delete=models.CASCADE, null=True)
     follows = models.ForeignKey(User, related_name='followed_by', on_delete=models.CASCADE, blank=True, null=True)
 
     def __str__(self):

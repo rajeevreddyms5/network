@@ -112,15 +112,25 @@ def profile(request):
     
     # for each user in users check whether they are followed by the current user
     userList = []
-    for name in users:
-        if len(following) != 0:
+    count = len(users)
+    if len(following) != 0:
+        for name in users:
             for a in following:
+                print(a)
                 if str(name) == str(a):
                     userList.append([name, True])
-                else:
-                    userList.append([name, False])
-        else:
+                    count = count - 1
+                    print("1")
+                    break   
+        if count > 0:    
             userList.append([name, False])
+            count = count - 1
+            print("2")
+        
+            
+    else:
+        userList.append([name, False])
+    
     
     # render httpresponse with context
     return render(request, "network/profile.html", {
@@ -155,7 +165,6 @@ def following(request):
         temp_user = User.objects.get(username=name)
         for post in temp_user.authored_posts.order_by("-created_at").all():
             following_post_list.append(post)
-
     
     return render(request, "network/following.html", {
         "posts": following_post_list,
@@ -165,16 +174,20 @@ def following(request):
 
 # create follow or unfollow button function
 @login_required
-def followUnfollow(request, username):
-    # get current user
+def followUnfollow(request, username, status, user_id):
+    
+    # get current userid
     current_user = User.objects.get(id=request.user.id)
-
-    # create put request
-    if request.method == "PUT":
-        user = User.objects.get(username=username)
-        if user in request.current_user.following.all():
-            request.current_user.following.remove(user)
-            return HttpResponse(status=204)
-        else:
-            request.current_user.following.add(user)
-            return HttpResponse(status=204)
+    
+    # get username id from username
+    user = User.objects.get(username=username)
+    
+    
+    if status == "True":
+        userprofile = UserProfile.objects.get(id=user_id)
+        userprofile.delete()
+    else:
+        userprofile = UserProfile.objects.create(user_name=current_user, follows=user)
+        userprofile.save()
+    
+    return HttpResponseRedirect(reverse("profile"))
