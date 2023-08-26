@@ -9,17 +9,28 @@
     
     <ul class="nav nav-tabs" id="myTab" role="tablist" style="margin-left: 20px;">
         <li class="nav-item" role="presentation">
-            <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home-tab-pane" type="button" role="tab" aria-controls="home-tab-pane" aria-selected="true">Posts</button>
+            <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home-tab-pane" type="button" role="tab" aria-controls="home-tab-pane" aria-selected="true">Users</button>
         </li>
         <li class="nav-item" role="presentation">
-            <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile-tab-pane" type="button" role="tab" aria-controls="profile-tab-pane" aria-selected="false">Users</button>
+            <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile-tab-pane" type="button" role="tab" aria-controls="profile-tab-pane" aria-selected="false">Your Posts</button>
         </li>
     </ul>
     <div class="tab-content" id="myTabContent" style="padding: 20px;">
         <div class="tab-pane fade show active" id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab" tabindex="0">
+             <!-- show all users except current user -->
+            {% for user in users %}
+             <div class="card" style="width: 20rem;">
+                 <div class="card-body">
+                 <h5 class="card-title" style="display: inline-block;">{{ user.0 }}</h5><a href={% url 'followUnfollow' user.0 user.1 user.0.id%} class="btn btn-primary" id="followButton" style="display: inline-block; float: right;">
+                     {% if user.1 %}Unfollow{% else %}Follow{% endif %}</a>
+                 </div>
+             </div>
+            {% endfor %}
+        </div>
+        <div class="tab-pane fade" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
             <!-- show all posts -->
             {% if no_posts > 0 %}
-                <h3 style="padding-left: 20px; padding-right: 20px; padding-bottom: 10px;">Posts made by you</h3>
+            <h3 style="padding-left: 20px; padding-right: 20px; padding-bottom: 10px;">Posts made by you</h3>
                 {% for post in posts %}
                 <div style="padding-left: 20px; padding-right: 20px; padding-bottom: 10px;">
                     <div class="card border" style="padding: 10px;">
@@ -34,17 +45,6 @@
             {% else %}
                 <h3 style="padding-left: 20px; padding-right: 20px; padding-bottom: 10px;">No Posts made by you</h3>
             {% endif %}
-        </div>
-        <div class="tab-pane fade" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
-            <!-- show all users except current user -->
-            {% for user in users %}
-                <div class="card" style="width: 20rem;">
-                    <div class="card-body">
-                    <h5 class="card-title" style="display: inline-block;">{{ user.0 }}</h5><a href={% url 'followUnfollow' user.0 user.1 user.0.id%} class="btn btn-primary" id="followButton" style="display: inline-block; float: right;">
-                        {% if user.1 %}Unfollow{% else %}Follow{% endif %}</a>
-                    </div>
-                </div>
-            {% endfor %}
         </div>
     </div>
 {% endblock %}

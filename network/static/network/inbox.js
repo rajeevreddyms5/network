@@ -1,14 +1,16 @@
 document.addEventListener('DOMContentLoaded', function() {
 
   // Use buttons to toggle between views
-  document.querySelector('#followButton').addEventListener('onsubmit', () => load_follow(username, state));
+  document.querySelector('#likeButton').addEventListener('click', () => load_likes());
 
 });
 
 
+// like and unlike function
+function load_likes() {
 
-// archive function
-function load_follow(id, state) {
+  alert("you clicked the like button");
+
   if (state === false) {
     fetch(`/emails/${id}`, {
       method: 'PUT',

@@ -1,4 +1,6 @@
 {% extends "network/layout.html" %}
+{% load static %}
+
 
 {% block body %}
     <!-- create form with text field and submit button within a box -->
@@ -24,12 +26,18 @@
     <div style="padding-left: 20px; padding-right: 20px; padding-bottom: 10px;">
         <div class="card border" style="padding: 10px;">
             <h5 class="card-title text-capitalize">{{ post.author }}</h5>
-            <a href="#" class="card-link">Edit</a>
+            {% if post.author == current_user %}
+                <a href="#" class="card-link">Edit</a>
+            {% endif %}
             <div class="card-text">{{ post.content }}</div>
             <div class="text-muted">{{ post.created_at }}</div>
-            <div class="card-text">❤️{{ post.liked.count }}</div>
+            <div class="card-text">❤️{{ post.liked.count }} <button class="btn btn-sm btn-outline-primary" style="display: block-inline;" id="likeButton">  Like</button></div>
         </div>
     </div>
     {% endfor %}
 
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'network/inbox.js' %}"></script>
 {% endblock %}

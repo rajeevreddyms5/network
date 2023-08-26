@@ -179,3 +179,5 @@ class UserProfileModelTestCase(TestCase):
         # test profile page content
         self.assertEqual(len(response.context['posts']), 2)
         self.assertEqual(response.context['no_posts'], 2)
+
+

@@ -9,10 +9,18 @@ from .models import User, Posts, UserProfile
 
 
 def index(request):
-    return render(request, "network/index.html", {
-        # filter posts by created_at date
-        "posts": Posts.objects.order_by("-created_at").all()
-    })
+    if request.user.is_authenticated:
+        return render(request, "network/index.html", {
+            # filter posts by created_at date
+            "posts": Posts.objects.order_by("-created_at").all(),
+            "current_user": User.objects.get(id=request.user.id),
+        })
+    else:
+        return render(request, "network/index.html", {
+            # filter posts by created_at date
+            "posts": Posts.objects.order_by("-created_at").all(),
+            "current_user": None,
+        })
 
 
 def login_view(request):
@@ -123,7 +131,6 @@ def profile(request):
             for x in userList:
                 templist.append(x[0])
             if name not in templist:
-                print(f"{name}, not in {userList}")
                 userList.append([name, False])
     
     if len(following) == 0:
