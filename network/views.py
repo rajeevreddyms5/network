@@ -4,21 +4,27 @@ from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
+from django.core.paginator import Paginator
 
 from .models import User, Posts, UserProfile
 
 
 def index(request):
     if request.user.is_authenticated:
+        # filter posts by created_at date
+        all_posts = Posts.objects.order_by("-created_at").all()
+        paginator = Paginator(all_posts, 10) # show 10 posts per page
+        
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+        
         return render(request, "network/index.html", {
-            # filter posts by created_at date
-            "posts": Posts.objects.order_by("-created_at").all(),
+            "posts": page_obj,
             "current_user": User.objects.get(id=request.user.id),
         })
     else:
         return render(request, "network/index.html", {
-            # filter posts by created_at date
-            "posts": Posts.objects.order_by("-created_at").all(),
+            "posts": page_obj,
             "current_user": None,
         })
 
@@ -137,13 +143,19 @@ def profile(request):
         for name in users:
             userList.append([name, False])
 
+    # Pagination
+    all_posts = user.authored_posts.order_by("-created_at").all()
+    paginator = Paginator(all_posts, 10) # show 10 posts per page
+        
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
     
     # render httpresponse with context
     return render(request, "network/profile.html", {
         "followed_by": len(followed_by),
         "following": len(following),
         "no_posts": len(posts),
-        "posts": user.authored_posts.order_by("-created_at").all(),
+        "posts": page_obj,
         "users": userList
     })
 
@@ -172,22 +184,28 @@ def following(request):
         for post in temp_user.authored_posts.order_by("-created_at").all():
             following_post_list.append(post)
     
+    # Pagination
+    all_posts = following_post_list
+    paginator = Paginator(all_posts, 10) # show 10 posts per page
+        
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    
     return render(request, "network/following.html", {
-        "posts": following_post_list,
+        "posts": page_obj,
         "no_posts": len(following_post_list),
     })
     
 
 # create follow or unfollow button function
 @login_required
-def followUnfollow(request, username, status, user_id):
+def followUnfollow(request, username, status):
     
     # get current userid
     current_user = User.objects.get(id=request.user.id)
     
     # get username id from username
     user = User.objects.get(username=username)
-    
     
     if status == "True":
         userprofile = UserProfile.objects.get(user_name=current_user, follows=user)

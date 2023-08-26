@@ -21,7 +21,7 @@
             {% for user in users %}
              <div class="card" style="width: 20rem;">
                  <div class="card-body">
-                 <h5 class="card-title" style="display: inline-block;">{{ user.0 }}</h5><a href={% url 'followUnfollow' user.0 user.1 user.0.id%} class="btn btn-primary" id="followButton" style="display: inline-block; float: right;">
+                 <h5 class="card-title" style="display: inline-block;">{{ user.0 }}</h5><a href={% url 'followUnfollow' user.0 user.1 %} class="btn btn-primary" id="followButton" style="display: inline-block; float: right;">
                      {% if user.1 %}Unfollow{% else %}Follow{% endif %}</a>
                  </div>
              </div>
@@ -41,7 +41,27 @@
                         <div class="card-text">❤️{{ post.liked.count }}</div>
                     </div>
                 </div>
+
                 {% endfor %}
+                <nav aria-label="Page navigation example">
+                    <div class="pagination justify-content-center">
+                        <span class="step-links">
+                            {% if posts.has_previous %}
+                                <a class="page-link" href="?page=1" style="display: inline-block">&laquo; first</a>
+                                <a class="page-link"href="?page={{ posts.previous_page_number }}" style="display: inline-block">previous</a>
+                            {% endif %}
+                    
+                            <span class="current" style="display: inline-block">
+                                Page {{ posts.number }} of {{ posts.paginator.num_pages }}.
+                            </span>
+                    
+                            {% if posts.has_next %}
+                                <a class="page-link" href="?page={{ posts.next_page_number }}" style="display: inline-block">next</a>
+                                <a class="page-link" href="?page={{ posts.paginator.num_pages }}" style="display: inline-block">last &raquo;</a>
+                            {% endif %}
+                        </span>
+                    </div>
+                </nav>
             {% else %}
                 <h3 style="padding-left: 20px; padding-right: 20px; padding-bottom: 10px;">No Posts made by you</h3>
             {% endif %}

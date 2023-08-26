@@ -35,6 +35,25 @@
         </div>
     </div>
     {% endfor %}
+    <nav aria-label="Page navigation example">
+        <div class="pagination justify-content-center">
+            <span class="step-links">
+                {% if posts.has_previous %}
+                    <a class="page-link" href="?page=1" style="display: inline-block">&laquo; first</a>
+                    <a class="page-link"href="?page={{ posts.previous_page_number }}" style="display: inline-block">previous</a>
+                {% endif %}
+        
+                <span class="current" style="display: inline-block">
+                    Page {{ posts.number }} of {{ posts.paginator.num_pages }}.
+                </span>
+        
+                {% if posts.has_next %}
+                    <a class="page-link" href="?page={{ posts.next_page_number }}" style="display: inline-block">next</a>
+                    <a class="page-link" href="?page={{ posts.paginator.num_pages }}" style="display: inline-block">last &raquo;</a>
+                {% endif %}
+            </span>
+        </div>
+    </nav>
 
 {% endblock %}
 
