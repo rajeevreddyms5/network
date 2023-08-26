@@ -109,25 +109,26 @@ def profile(request):
     
     # get all users except current user
     users = User.objects.exclude(id=user_id).exclude(username="rajeev")
-    
+
     # for each user in users check whether they are followed by the current user
     userList = []
     count = len(users)
     if len(following) != 0:
         for name in users:
             for a in following:
-                print(f"name: {name} == a: {a}")
+                #print(f"name: {name} == a: {a}")
                 if str(name) == str(a):
                     userList.append([name, True])
                     count = count - 1
                     break   
         if count > 0:
-            print(f"name: {name} == a: {a}")    
+            #print(f"name: {name} == a: {a}")    
             userList.append([name, False])
             count = count - 1
                
     else:
         userList.append([name, False])
+
     
     # render httpresponse with context
     return render(request, "network/profile.html", {
