@@ -112,22 +112,23 @@ def profile(request):
 
     # for each user in users check whether they are followed by the current user
     userList = []
-    count = len(users)
+    templist = []
     if len(following) != 0:
         for name in users:
             for a in following:
-                #print(f"name: {name} == a: {a}")
                 if str(name) == str(a):
                     userList.append([name, True])
-                    count = count - 1
-                    break   
-        if count > 0:
-            #print(f"name: {name} == a: {a}")    
+                    break
+            
+            for x in userList:
+                templist.append(x[0])
+            if name not in templist:
+                print(f"{name}, not in {userList}")
+                userList.append([name, False])
+    
+    if len(following) == 0:
+        for name in users:
             userList.append([name, False])
-            count = count - 1
-               
-    else:
-        userList.append([name, False])
 
     
     # render httpresponse with context
