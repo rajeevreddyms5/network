@@ -116,21 +116,18 @@ def profile(request):
     if len(following) != 0:
         for name in users:
             for a in following:
-                print(a)
+                print(f"name: {name} == a: {a}")
                 if str(name) == str(a):
                     userList.append([name, True])
                     count = count - 1
-                    print("1")
                     break   
-        if count > 0:    
+        if count > 0:
+            print(f"name: {name} == a: {a}")    
             userList.append([name, False])
             count = count - 1
-            print("2")
-        
-            
+               
     else:
         userList.append([name, False])
-    
     
     # render httpresponse with context
     return render(request, "network/profile.html", {
@@ -184,7 +181,7 @@ def followUnfollow(request, username, status, user_id):
     
     
     if status == "True":
-        userprofile = UserProfile.objects.get(id=user_id)
+        userprofile = UserProfile.objects.get(user_name=current_user, follows=user)
         userprofile.delete()
     else:
         userprofile = UserProfile.objects.create(user_name=current_user, follows=user)
