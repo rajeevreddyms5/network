@@ -1,6 +1,9 @@
 from django.test import TestCase, Client
 from .models import UserProfile, User, Posts
 
+# import paginator
+from django.core.paginator import Paginator
+
 # Create your tests here.
 
 # create test case for Posts model
@@ -55,7 +58,14 @@ class PostsModelTestCase(TestCase):
     
     # test index view page response
     def test_index(self):
-        
+            
+            # query all posts
+            posts = Posts.objects.all()
+            
+            # paginator
+            paginator = Paginator(posts, 10)
+            page_obj = paginator.get_page(1)
+            
             # setup client to make requests
             c = Client()
         
@@ -65,8 +75,13 @@ class PostsModelTestCase(TestCase):
             # make sure the status code is 200
             self.assertEqual(response.status_code, 200)
             
+            # Assert that the correct template is used
+            self.assertTemplateUsed(response, 'network/index.html')
+
+            
             # make sure three posts are returned in the context
-            self.assertEqual(response.context['posts'].count(), 3)
+            self.assertEqual(len(response.context['posts']), 3)
+
     
 
 # create UserProfile Model Test Case

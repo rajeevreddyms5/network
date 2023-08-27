@@ -10,14 +10,14 @@ from .models import User, Posts, UserProfile
 
 
 def index(request):
-    if request.user.is_authenticated:
-        # filter posts by created_at date
-        all_posts = Posts.objects.order_by("-created_at").all()
-        paginator = Paginator(all_posts, 10) # show 10 posts per page
-        
-        page_number = request.GET.get('page')
-        page_obj = paginator.get_page(page_number)
-        
+    # get all posts by created data in reverse chronological order
+    all_posts = Posts.objects.order_by("-created_at").all()
+    paginator = Paginator(all_posts, 10) # show 10 posts per page
+    
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    
+    if request.user.is_authenticated: 
         return render(request, "network/index.html", {
             "posts": page_obj,
             "current_user": User.objects.get(id=request.user.id),
