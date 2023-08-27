@@ -27,7 +27,7 @@
         <div class="card border" style="padding: 10px;">
             <h5 class="card-title text-capitalize">{{ post.author }}</h5>
             {% if post.author == current_user %}
-                <a href="#" class="card-link">Edit</a>
+                <a href="#" id="edit_post" class="card-link">Edit</a>
             {% endif %}
             <div class="card-text">{{ post.content }}</div>
             <div class="text-muted">{{ post.created_at }}</div>
