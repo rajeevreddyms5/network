@@ -67,4 +67,43 @@
             {% endif %}
         </div>
     </div>
+    
+    <script>
+        // keep the posts tab active when user clicks on paginated buttons
+        document.addEventListener("DOMContentLoaded", () => {
+
+            window.onload = function () {
+                const temp = localStorage.getItem('currentTab')
+                if (temp === 'profile-tab'){
+                    load_test()
+                }
+            }
+
+            document.querySelector('.page-link').addEventListener('click', () => {
+                localStorage.setItem('currentTab', 'profile-tab')
+            });
+
+            document.querySelector('#home-tab').addEventListener('click', () => {
+                localStorage.removeItem('currentTab')
+            })
+        })
+
+        function load_test() {
+            ptab = document.querySelector('#profile-tab')
+            ptab.classList.add('active')
+
+            htab = document.querySelector('#home-tab')
+            htab.classList.remove('active')
+
+            ptabcontent = document.querySelector('#profile-tab-pane')
+            ptabcontent.classList.add('show')
+            ptabcontent.classList.add('active')
+            
+
+            htabcontent = document.querySelector('#home-tab-pane')
+            htabcontent.classList.remove('show')
+            htabcontent.classList.remove('active')
+        }
+    </script>
+   
 {% endblock %}
