@@ -12,7 +12,7 @@
                     <div class="form-group">
                         <label for="exampleFormControlTextarea1" class="font-weight-bold">New Post</label>
                         <textarea class="form-control" id="exampleFormControlTextarea1" rows="2" name="content" required></textarea>
-                        <input class="btn btn-primary" id="postButton" type="submit" value="Post" style="margin-top: 10px;">
+                        <input class="btn btn-primary" id="postButton" onclick="savePost()" type="submit" value="Post" style="margin-top: 10px;">
                     </div>
                 </div>
             </div>
@@ -58,5 +58,8 @@
 {% endblock %}
 
 {% block script %}
+    <script>
+        var csrf = "{{ csrf_token }}"
+    </script>
     <script src="{% static 'network/inbox.js' %}"></script>
 {% endblock %}

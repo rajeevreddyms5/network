@@ -6,7 +6,7 @@ from django.shortcuts import render
 from django.urls import reverse
 from django.core.paginator import Paginator
 import json
-
+from django.views.decorators.csrf import csrf_exempt
 
 from .models import User, Posts, UserProfile
 
@@ -220,7 +220,6 @@ def followUnfollow(request, username, status):
 
 
 # create api view function to fetch post data
-@login_required
 def posts(request, post_id):
     
      # Query for requested email
@@ -234,9 +233,12 @@ def posts(request, post_id):
         return JsonResponse(post.serialize())
     
 
-    # Update whether post should be updated or new post should be created
+    # if the method is PUT then save the post content
     elif request.method == "PUT":
-        return JsonResponse(post.serialize())
+        data = json.loads(request.body)
+        post.content = data["content"]
+        post.save()
+        return HttpResponse(status=204)
     
     # Post must be via GET or PUT
     else:

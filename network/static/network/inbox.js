@@ -11,7 +11,13 @@ document.addEventListener('DOMContentLoaded', function() {
   window.onload = function() {
     localStorage.removeItem('editID')
     document.querySelector('#editForm').setAttribute('method', 'post');
+    document.querySelector("#postButton").setAttribute('type', 'submit');
   }
+
+  // select the id of post button and on click call the savePost function
+  //if (localStorage.getItem('editID') !== null) {
+  //  document.querySelector('#postButton').addEventListener('click', savePost);
+  //}
 
 })
 
@@ -66,22 +72,63 @@ function load_likes() {
           // select the form element with id editForm and change its method to PUT
           document.querySelector('#editForm').setAttribute('method', 'PUT');
 
-          
+          // select the post button and change its type to button
+          document.querySelector("#postButton").setAttribute('type', 'button');
       });
     
     // Stop form from submitting
     return false
-    
+
   }
 
+  // function to get csrf token
+  function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie != '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = cookies[i].trim();
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
 
   // function to save the edited post
   function savePost() {
-    // get post id
-    id = Number(localStorage.getItem('editID'));
 
-    // send to console
-    console.log(id);
+    // get post id
+    post_id = Number(localStorage.getItem('editID'));
+
+    // get csrf token from id editForm and set it to token
+    var csrftoken = getCookie('csrftoken');
+    console.log(csrftoken);
+
+
+    const request = new Request(
+      `/posts/${post_id}`,
+      {
+          method: 'PUT',
+          headers: {'X-CSRFToken': csrftoken},
+          mode: 'same-origin', // Do not send CSRF token to another domain.
+          body: JSON.stringify({
+            csrfmiddlewaretoken: csrftoken,
+            content: document.querySelector('#exampleFormControlTextarea1').value
+          }),
+      }
+    );
+
+    fetch(request).then(function(response) {
+      // ...
+    });
+
+    // clear textarea
+    document.querySelector('#exampleFormControlTextarea1').value = '';
+
 
     // Stop form from submitting
     return false
