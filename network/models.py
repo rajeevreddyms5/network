@@ -5,6 +5,16 @@ from django.db import models
 class User(AbstractUser):
     pass
 
+    # serialze for api
+    def serialize(self):
+        return {
+            "id": self.id,
+            "username": self.username,
+            "email": self.email,
+            "first_name": self.first_name,
+            "last_name": self.last_name
+        }
+
 
 # create class model for posts, like and unlike
 class Posts(models.Model):
@@ -21,7 +31,7 @@ class Posts(models.Model):
         return {
             "id": self.id,
             "content": self.content,
-            "author": self.author,
+            "author": str(User.objects.get(id=self.author.id)),
             "created_at": self.created_at.strftime("%b %d %Y, %I:%M %p"),
             "liked": [user.username for user in self.liked.all()]
         }
@@ -34,3 +44,11 @@ class UserProfile(models.Model):
 
     def __str__(self):
         return f"{self.follows}"
+
+    # serialze for api
+    def serialize(self):
+        return {
+            "id": self.id,
+            "user_name": self.user_name,
+            "follows": self.follows
+        }

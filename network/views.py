@@ -1,10 +1,12 @@
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
 from django.urls import reverse
 from django.core.paginator import Paginator
+import json
+
 
 from .models import User, Posts, UserProfile
 
@@ -215,3 +217,24 @@ def followUnfollow(request, username, status):
         userprofile.save()
     
     return HttpResponseRedirect(reverse("profile"))
+
+
+# create api view function to fetch post data
+@login_required
+def posts(request, post_id):
+    
+     # Query for requested email
+    try:
+        post = Posts.objects.get(pk=post_id)
+    except Posts.DoesNotExist:
+        return JsonResponse({"error": "Post not found."}, status=404)
+
+    # Return email contents
+    if request.method == "GET":
+        return JsonResponse(post.serialize())
+    
+    # Email must be via GET
+    else:
+        return JsonResponse({
+           "error": "GET request required."
+        }, status=400)

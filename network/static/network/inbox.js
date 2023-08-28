@@ -1,3 +1,5 @@
+
+
 document.addEventListener('DOMContentLoaded', function() {
 
   // select all ids of likeButton and for each click on likeButton load_likes function
@@ -5,7 +7,7 @@ document.addEventListener('DOMContentLoaded', function() {
     element.addEventListener('click', load_likes);
   })
 
-  
+
 })
 
 
@@ -39,10 +41,18 @@ function load_likes() {
 
 
   // edit function to edit the post from posts
-  function editPost(id) {
+  function editPost(post_id) {
 
-    // select the class "form-group" and populate the fields with the data from the post the user wants to edit
-    alert("you clicked the edit button of " + id);
+    // fetch the post using API
+    fetch(`/posts/${post_id}`)
+      .then(response => response.json())
+      .then(post => {
+          // Print email
+          console.log(post);
 
+          // ... do something else with post ...
+          
 
+      }); 
+    
   }
