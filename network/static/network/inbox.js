@@ -7,6 +7,11 @@ document.addEventListener('DOMContentLoaded', function() {
     element.addEventListener('click', load_likes);
   })
 
+  // on window reload remove local storage and set editForm method to post
+  window.onload = function() {
+    localStorage.removeItem('editID')
+    document.querySelector('#editForm').setAttribute('method', 'post');
+  }
 
 })
 
@@ -51,8 +56,34 @@ function load_likes() {
           console.log(post);
 
           // ... do something else with post ...
-          
+          textarea = document.querySelector('#exampleFormControlTextarea1');
+          textarea.focus();
+          textarea.value = post.content;
 
-      }); 
+          // post value to post button
+          localStorage.setItem('editID', post_id)
+
+          // select the form element with id editForm and change its method to PUT
+          document.querySelector('#editForm').setAttribute('method', 'PUT');
+
+          
+      });
     
+    // Stop form from submitting
+    return false
+    
+  }
+
+
+  // function to save the edited post
+  function savePost() {
+    // get post id
+    id = Number(localStorage.getItem('editID'));
+
+    // send to console
+    console.log(id);
+
+    // Stop form from submitting
+    return false
+
   }
