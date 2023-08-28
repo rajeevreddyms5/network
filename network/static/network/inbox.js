@@ -1,16 +1,11 @@
 document.addEventListener('DOMContentLoaded', function() {
 
-  // Use buttons to toggle between views
-  document.querySelector('#likeButton').addEventListener('click', () => load_likes());
+  // select all ids of likeButton and for each click on likeButton load_likes function
+  document.querySelectorAll('#likeButton').forEach(function(element) {
+    element.addEventListener('click', load_likes);
+  })
 
-  // edit each post from posts
-  document.querySelectorAll('#edit_post').forEach(edit => {
-    edit.addEventListener('click', () => {
-      alert("You clicked the edit button");
-    });
-  });
   
-
 })
 
 
@@ -44,9 +39,10 @@ function load_likes() {
 
 
   // edit function to edit the post from posts
-  function editPost() {
+  function editPost(id) {
 
-    // test
-    alert("you clicked the edit button");
+    // select the class "form-group" and populate the fields with the data from the post the user wants to edit
+    alert("you clicked the edit button of " + id);
+
 
   }
