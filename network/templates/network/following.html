@@ -14,7 +14,7 @@
                 <h5 class="card-title text-capitalize">{{ post.author }}</h5>
                 <div class="card-text">{{ post.content }}</div>
                 <div class="text-muted">{{ post.created_at }}</div>
-                <div class="card-text">❤️{{ post.liked.count }}</div>
+                <div class="card-text">❤️<a id="likeCount{{ forloop.counter0 }}">{{ post.liked.count }}</a>{% if user.is_authenticated %} <button class="btn btn-sm btn-outline-primary" style="display: block-inline;" id="likeButton{{ forloop.counter0 }}" onclick = "likePost({{ post.id }})">{% if post in current_user.liked_post.all %}Unlike{% else %}like{% endif %}</button>{% endif %}</div>
             </div>
         </div>
         {% endfor %}
@@ -40,4 +40,11 @@
     {% else %}
         <h3 style="padding-left: 20px; padding-right: 20px; padding-bottom: 10px;">No Posts made by users that you follow</h3>
     {% endif %}
+{% endblock %}
+
+{% block script %}
+    <script>
+        var csrf = "{{ csrf_token }}"
+    </script>
+    <script src="{% static 'network/inbox.js' %}"></script>
 {% endblock %}

@@ -129,9 +129,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
   // like and unlike function
-function likePost(event, post_id) {
+function likePost(post_id) {
 
   console.log("you clicked the like button");
+  console.log(post_id);
 
   // get clicked post id
   var buttonid = this.event.target.id;
@@ -146,14 +147,53 @@ function likePost(event, post_id) {
   divCountNumber = Number(divCount.innerText);
   console.log(divCount);
 
+  // get csrf token
+  var csrftoken = getCookie('csrftoken');
+
   // like or unlike
   if (buttonText.innerText === "like") {
     divCountNumber++;
+    
+    const request = new Request(
+      `/likes/${post_id}`,
+      {
+          method: 'PUT',
+          headers: {'X-CSRFToken': csrftoken},
+          mode: 'same-origin', // Do not send CSRF token to another domain.
+          body: JSON.stringify({
+            liked: "false",
+          }),
+      }
+    );
+
+    fetch(request).then(function(response) {
+      // ...
+      console.log(response);
+    });
+
     divCount.innerText = divCountNumber;
     buttonText.innerText = "Unlike";
   }
   else {
     divCountNumber--;
+
+    const request = new Request(
+      `/likes/${post_id}`,
+      {
+          method: 'PUT',
+          headers: {'X-CSRFToken': csrftoken},
+          mode: 'same-origin', // Do not send CSRF token to another domain.
+          body: JSON.stringify({
+            liked: "true",
+          }),
+      }
+    );
+
+    fetch(request).then(function(response) {
+      // ...
+      console.log(response);
+    });
+
     divCount.innerText = divCountNumber;
     buttonText.innerText = "like";
   }

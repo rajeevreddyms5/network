@@ -158,7 +158,8 @@ def profile(request):
         "following": len(following),
         "no_posts": len(posts),
         "posts": page_obj,
-        "users": userList
+        "users": userList,
+        "current_user": User.objects.get(id=request.user.id),
     })
 
 
@@ -196,6 +197,7 @@ def following(request):
     return render(request, "network/following.html", {
         "posts": page_obj,
         "no_posts": len(following_post_list),
+        "current_user": User.objects.get(id=request.user.id),
     })
     
 
@@ -267,4 +269,20 @@ def likes(request, post_id):
     likes = post.liked.all()
     print(likes)
 
-    return HttpResponse(status=204);
+    # if the method is PUT then save the user liked that post
+    if request.method == "PUT":
+        data = json.loads(request.body)
+        if data.get("liked") == "false":
+            post.liked.add(current_user)
+            post.save()
+            print(f"successfully added {current_user} from {post}")
+            return HttpResponse(status=204)
+        else:
+            post.liked.remove(current_user)
+            post.save()
+            print(f"successfully removed {current_user} from {post}")
+            return HttpResponse(status=204)
+    else:
+        return JsonResponse({
+           "error": "PUT request required."
+        }, status=400)
