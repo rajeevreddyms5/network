@@ -9,7 +9,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // on window reload remove local storage and set editForm method to post
   window.onload = function() {
-    localStorage.removeItem('editID')
+    localStorage.removeItem('editID');
+    localStorage.removeItem('divID');
     document.querySelector('#editForm').setAttribute('method', 'post');
     document.querySelector("#postButton").setAttribute('type', 'submit');
   }
@@ -53,6 +54,14 @@ function load_likes() {
 
   // edit function to edit the post from posts
   function editPost(post_id) {
+
+    // select the form element with id editForm
+    var divID = this.event.target.id;
+    result = divID.slice(9, divID.length); // get the number of the div
+    console.log(result);
+
+    // set the number to local storage
+    localStorage.setItem('divID', result);
 
     // fetch the post using API
     fetch(`/posts/${post_id}`)
@@ -99,7 +108,15 @@ function load_likes() {
 }
 
   // function to save the edited post
-  function savePost() {
+  function savePost(event) {
+
+    // get the divID from local storage
+    var divID = localStorage.getItem('divID');
+    console.log(divID);
+
+    // select the div element with id divID{result}
+    var div = document.getElementById(`postContent${result}`);
+    console.log(div);
 
     // get post id
     post_id = Number(localStorage.getItem('editID'));
@@ -125,6 +142,9 @@ function load_likes() {
     fetch(request).then(function(response) {
       // ...
     });
+
+    // change the inner html text of the div to value of the exampleformcontroltextarea1
+    div.innerHTML = document.querySelector('#exampleFormControlTextarea1').value
 
     // clear textarea
     document.querySelector('#exampleFormControlTextarea1').value = '';
