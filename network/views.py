@@ -251,7 +251,7 @@ def posts(request, post_id):
 # create function to put likes on posts
 @login_required
 def likes(request, post_id):
-    
+
     # get userid
     current_user = User.objects.get(id=request.user.id)
     print(current_user)

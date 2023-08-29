@@ -132,9 +132,31 @@ document.addEventListener('DOMContentLoaded', function() {
 function likePost(event, post_id) {
 
   console.log("you clicked the like button");
+
+  // get clicked post id
+  var buttonid = this.event.target.id;
+  console.log(buttonid.slice(10, buttonid.length));
+
+  // get the html text fo the like button
+  var buttonText = document.getElementById(buttonid);
+  console.log(buttonText.innerText);
+
+  // select the div element with id likeCount
+  var divCount = document.getElementById(`likeCount${buttonid.slice(10, buttonid.length)}`);
+  divCountNumber = Number(divCount.innerText);
+  console.log(divCount);
+
+  // like or unlike
+  if (buttonText.innerText === "like") {
+    divCountNumber++;
+    divCount.innerText = divCountNumber;
+    buttonText.innerText = "Unlike";
+  }
+  else {
+    divCountNumber--;
+    divCount.innerText = divCountNumber;
+    buttonText.innerText = "like";
+  }
+
   
-
-
-  // refresh webpage
-  location.reload();
 }

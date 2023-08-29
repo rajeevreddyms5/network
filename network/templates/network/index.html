@@ -31,7 +31,7 @@
             {% endif %}
             <div class="card-text" id="postContent{{ forloop.counter0 }}">{{ post.content }}</div>
             <div class="text-muted">{{ post.created_at }}</div>
-            <div class="card-text" id="likeCount{{ forloop.counter0 }}">❤️{{ post.liked.count }} {% if user.is_authenticated %} <button class="btn btn-sm btn-outline-primary" style="display: block-inline;" id="likeButton{{ forloop.counter0 }}" onclick="likePost({{ post.id }})">  Like</button>{% endif %}</div>
+            <div class="card-text">❤️<a id="likeCount{{ forloop.counter0 }}">{{ post.liked.count }}</a>{% if user.is_authenticated %} <button class="btn btn-sm btn-outline-primary" style="display: block-inline;" id="likeButton{{ forloop.counter0 }}" onclick="likePost({{ post.id }})">{% if post in current_user.liked_post.all %}Unlike{% else %}like{% endif %}</button>{% endif %}</div>
         </div>
     </div>
     {% endfor %}
