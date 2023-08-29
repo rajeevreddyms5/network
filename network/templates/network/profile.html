@@ -1,4 +1,5 @@
 {% extends "network/layout.html" %}
+{% load static %}
 
 {% block body %}
     <h2 style="margin-left: 20px; margin-top: 20px;">Profile</h2>
@@ -28,6 +29,23 @@
             {% endfor %}
         </div>
         <div class="tab-pane fade" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
+            <!-- create form with text field and submit button within a box -->
+            {% if user.is_authenticated %}
+                <form id="editForm" action="{% url 'post' %}" method="post" style="padding: 20px;">
+                    {% csrf_token %}
+                    <div class="card border">
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label for="exampleFormControlTextarea1" class="font-weight-bold">New Post</label>
+                                <textarea class="form-control" id="exampleFormControlTextarea1" rows="2" name="content" required></textarea>
+                                <input class="btn btn-primary" id="postButton" onclick="savePost()" type="submit" value="Post" style="margin-top: 10px;">
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            {% endif %}
+
+            <h2 style="margin-left: 20px; margin-top: 20px;">All Posts</h2>
             <!-- show all posts -->
             {% if no_posts > 0 %}
             <h3 style="padding-left: 20px; padding-right: 20px; padding-bottom: 10px;">Posts made by you</h3>
@@ -35,8 +53,8 @@
                 <div style="padding-left: 20px; padding-right: 20px; padding-bottom: 10px;">
                     <div class="card border" style="padding: 10px;">
                         <h5 class="card-title text-capitalize">{{ post.author }}</h5>
-                        <a href="#" class="card-link">Edit</a>
-                        <div class="card-text">{{ post.content }}</div>
+                        <a href="#" id="edit_post{{ forloop.counter0 }}" class="card-link" onclick = "editPost({{ post.id }})">Edit</a>
+                        <div class="card-text" id="postContent{{ forloop.counter0 }}">{{ post.content }}</div>
                         <div class="text-muted">{{ post.created_at }}</div>
                         <div class="card-text">❤️{{ post.liked.count }}</div>
                     </div>
@@ -106,4 +124,11 @@
         }
     </script>
    
+{% endblock %}
+
+{% block script %}
+    <script>
+        var csrf = "{{ csrf_token }}"
+    </script>
+    <script src="{% static 'network/inbox.js' %}"></script>
 {% endblock %}

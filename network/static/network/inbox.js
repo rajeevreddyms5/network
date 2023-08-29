@@ -22,41 +22,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
 })
 
-
-// like and unlike function
-function load_likes() {
-
-  alert("you clicked the like button");
-
-  if (state === false) {
-    fetch(`/emails/${id}`, {
-      method: 'PUT',
-      body: JSON.stringify({
-        user_name: true
-      })
-    });
-    load_mailbox('inbox');
-  }
-  else {
-    fetch(`/emails/${id}`, { 
-      method: 'PUT', 
-      body: JSON.stringify({ 
-        archived: false 
-      }) 
-    });
-    load_mailbox('inbox');
-  }
-
-  // refresh webpage
-  location.reload();
-}
-
-
   // edit function to edit the post from posts
   function editPost(post_id) {
-
+    
     // select the form element with id editForm
     var divID = this.event.target.id;
+    console.log(divID);
     result = divID.slice(9, divID.length); // get the number of the div
     console.log(result);
 
@@ -67,7 +38,7 @@ function load_likes() {
     fetch(`/posts/${post_id}`)
       .then(response => response.json())
       .then(post => {
-          // Print email
+          // Print post
           console.log(post);
 
           // ... do something else with post ...
@@ -154,3 +125,33 @@ function load_likes() {
     return false
 
   }
+
+
+
+  // like and unlike function
+function load_likes() {
+
+  alert("you clicked the like button");
+
+  if (state === false) {
+    fetch(`/emails/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify({
+        user_name: true
+      })
+    });
+    load_mailbox('inbox');
+  }
+  else {
+    fetch(`/emails/${id}`, { 
+      method: 'PUT', 
+      body: JSON.stringify({ 
+        archived: false 
+      }) 
+    });
+    load_mailbox('inbox');
+  }
+
+  // refresh webpage
+  location.reload();
+}
