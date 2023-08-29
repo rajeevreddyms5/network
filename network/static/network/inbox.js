@@ -3,9 +3,9 @@
 document.addEventListener('DOMContentLoaded', function() {
 
   // select all ids of likeButton and for each click on likeButton load_likes function
-  document.querySelectorAll('#likeButton').forEach(function(element) {
-    element.addEventListener('click', load_likes);
-  })
+  // document.querySelectorAll('#likeButton').forEach(function(element) {
+  //  element.addEventListener('click', load_likes);
+  //})
 
   // on window reload remove local storage and set editForm method to post
   window.onload = function() {
@@ -129,28 +129,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
   // like and unlike function
-function load_likes() {
+function likePost(event, post_id) {
 
-  alert("you clicked the like button");
+  console.log("you clicked the like button");
+  
 
-  if (state === false) {
-    fetch(`/emails/${id}`, {
-      method: 'PUT',
-      body: JSON.stringify({
-        user_name: true
-      })
-    });
-    load_mailbox('inbox');
-  }
-  else {
-    fetch(`/emails/${id}`, { 
-      method: 'PUT', 
-      body: JSON.stringify({ 
-        archived: false 
-      }) 
-    });
-    load_mailbox('inbox');
-  }
 
   // refresh webpage
   location.reload();

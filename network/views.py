@@ -245,3 +245,26 @@ def posts(request, post_id):
         return JsonResponse({
            "error": "GET or PUT request required."
         }, status=400)
+
+
+
+# create function to put likes on posts
+@login_required
+def likes(request, post_id):
+    
+    # get userid
+    current_user = User.objects.get(id=request.user.id)
+    print(current_user)
+
+     # Query for requested email
+    try:
+        post = Posts.objects.get(pk=post_id)
+        print(post)
+    except Posts.DoesNotExist:
+        return JsonResponse({"error": "Post not found."}, status=404)
+
+    # get likes
+    likes = post.liked.all()
+    print(likes)
+
+    return HttpResponse(status=204);
